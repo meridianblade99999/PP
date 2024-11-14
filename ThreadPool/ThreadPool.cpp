@@ -4,11 +4,12 @@
 #include <vector>
 #include <mutex>
 #include <queue>
+#include <sstream>
 
 using namespace std;
 
 ThreadPool::ThreadPool() {
-	this->shutdown = false;
+	shutdown = false;
 	int threadCount = std::thread::hardware_concurrency();
 	for (int i = 0; i < threadCount; i++) {
 		threads.emplace_back(thread(&ThreadPool::run, this));
@@ -21,9 +22,14 @@ ThreadPool::~ThreadPool() {
 	queueCondition.notify_all();
 	for (int i = 0; i < threads.size(); i++)
 	{
-		threads[i].join();
+		if (threads[i].joinable())
+			threads[i].join();
 	}
 	cout << "ThreadPool shutdown" << endl;
+}
+
+bool ThreadPool::isEmpty() {
+	return queue.empty();
 }
 
 void ThreadPool::addTask(func task) {
@@ -33,14 +39,27 @@ void ThreadPool::addTask(func task) {
 }
 
 void ThreadPool::run() {
+	int threadId = getCurrentThreadId();
+
 	while (!shutdown) {
 		unique_lock<mutex> lock(queueMutex);
-		queueCondition.wait(lock, [&]() {return !queue.empty();});
+		queueCondition.wait(lock, [this]() {return !queue.empty() || shutdown;});
 		if (!shutdown && !queue.empty()) {
-			func f = queue.front();
+			func f = std::move(queue.front());
 			queue.pop();
 			lock.unlock();
-			f();
+			f(threadId);
 		}
 	}
+}
+
+int getCurrentThreadId() {
+	std::stringstream ss;
+
+	ss << std::this_thread::get_id();
+
+	int id;
+	ss >> id;
+
+	return id;
 }

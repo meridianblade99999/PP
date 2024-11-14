@@ -7,7 +7,7 @@
 
 using namespace std;
 
-typedef std::function<void()> func;
+using func = std::function<void(int)>; //std::function<void()>;
 
 class ThreadPool {
 public:
@@ -15,6 +15,7 @@ public:
 	~ThreadPool();
 
 	void addTask(func task);
+	bool isEmpty();
 
 private:
 	bool shutdown;
@@ -28,3 +29,4 @@ private:
 
 };
 
+int getCurrentThreadId();

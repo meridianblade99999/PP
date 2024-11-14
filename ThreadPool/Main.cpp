@@ -18,9 +18,9 @@ int main()
 	ThreadPool threadPool;
 
 	for (int i = 0; i < 10; i++) {
-		std::function<void()> a = std::bind(f, i);
+		func a = std::bind(&f, std::placeholders::_1);
 		threadPool.addTask(a);
 	}
 
-	this_thread::sleep_for(chrono::milliseconds(100000));
+	while (!threadPool.isEmpty());
 }
