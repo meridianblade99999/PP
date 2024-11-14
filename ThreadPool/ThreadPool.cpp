@@ -53,7 +53,7 @@ void ThreadPool::run() {
 	}
 }
 
-int getCurrentThreadId() {
+int ThreadPool::getCurrentThreadId() {
 	std::stringstream ss;
 
 	ss << std::this_thread::get_id();

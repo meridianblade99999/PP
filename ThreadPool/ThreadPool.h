@@ -26,7 +26,6 @@ private:
 	condition_variable queueCondition;
 
 	void run();
+	int getCurrentThreadId();
 
 };
-
-int getCurrentThreadId();
