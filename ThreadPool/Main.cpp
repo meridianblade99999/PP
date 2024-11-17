@@ -3,24 +3,48 @@
 #include <chrono>
 #include <thread>
 #include <functional>
+#include <fstream>
 
 using namespace std;
 
+const int N = 1000000000;
+const string fileName = "out.txt";
+mutex fileMutex;
+
+void saveToFile(int result) {
+	lock_guard<mutex> lock(fileMutex);
+	ofstream file(fileName, ios::app);
+	file << result << endl;
+	file.close();
+}
+
 void f(int a) {
-	while (1) {
-		printf("%d\n", a);
-		this_thread::sleep_for(chrono::milliseconds(100));
+	for (int i = 0; i < N; i++) {
+		++a;
+		--a;
+		int x = a % 100;
+		a -= x;
+		a += x;
 	}
+	saveToFile(a);
 }
 
 int main()
-{
-	ThreadPool threadPool;
+{	
+	ofstream file(fileName);
+	file.clear();
+	file.close();
 
-	for (int i = 0; i < 10; i++) {
+	ThreadPool* threadPool = new ThreadPool();;
+
+	for (int i = 0; i < threadPool->getThreadCount() * 2; i++) {
 		func a = std::bind(&f, std::placeholders::_1);
-		threadPool.addTask(a);
+		threadPool->addTask(a);
 	}
 
-	while (!threadPool.isEmpty());
+	while (!threadPool->isEmpty());
+
+	delete threadPool;
+
+	cout << "Results saved to file: " << fileName << endl;
 }

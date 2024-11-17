@@ -63,3 +63,7 @@ int ThreadPool::getCurrentThreadId() {
 
 	return id;
 }
+
+int ThreadPool::getThreadCount() {
+	return threads.size();
+}
