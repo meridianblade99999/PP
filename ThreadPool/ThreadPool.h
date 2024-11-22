@@ -4,6 +4,7 @@
 #include <mutex>
 #include <queue>
 #include <functional>
+#include <condition_variable>
 
 using namespace std;
 
@@ -22,7 +23,7 @@ private:
 	bool shutdown;
 	vector<thread> threads;
 
-	queue<func> queue;
+	queue<func> taskQueue;
 	mutex queueMutex;
 	condition_variable queueCondition;
 

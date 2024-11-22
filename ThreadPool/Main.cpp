@@ -42,6 +42,8 @@ int main()
 		threadPool->addTask(a);
 	}
 
+	cout << "Calculating Trash..." << endl;
+
 	while (!threadPool->isEmpty());
 
 	delete threadPool;

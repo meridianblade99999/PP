@@ -29,12 +29,12 @@ ThreadPool::~ThreadPool() {
 }
 
 bool ThreadPool::isEmpty() {
-	return queue.empty();
+	return taskQueue.empty();
 }
 
 void ThreadPool::addTask(func task) {
 	lock_guard<mutex> lock(queueMutex);
-	queue.push(task);
+	taskQueue.push(task);
 	queueCondition.notify_one();
 }
 
@@ -43,10 +43,10 @@ void ThreadPool::run() {
 
 	while (!shutdown) {
 		unique_lock<mutex> lock(queueMutex);
-		queueCondition.wait(lock, [this]() {return !queue.empty() || shutdown;});
-		if (!shutdown && !queue.empty()) {
-			func f = std::move(queue.front());
-			queue.pop();
+		queueCondition.wait(lock, [this]() {return !taskQueue.empty() || shutdown;});
+		if (!shutdown && !taskQueue.empty()) {
+			func f = std::move(taskQueue.front());
+			taskQueue.pop();
 			lock.unlock();
 			f(threadId);
 		}
