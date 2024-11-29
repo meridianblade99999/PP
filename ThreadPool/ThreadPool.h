@@ -17,7 +17,7 @@ public:
 
 	void addTask(func task);
 	bool isEmpty();
-	int getThreadCount();
+	unsigned int getThreadCount();
 
 private:
 	bool shutdown;

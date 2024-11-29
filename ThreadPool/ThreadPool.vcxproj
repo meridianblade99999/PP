@@ -129,9 +129,11 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
+    <ClCompile Include="WindowsThreadPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ThreadPool.h" />
+    <ClInclude Include="WindowsThreadPool.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="make.txt" />

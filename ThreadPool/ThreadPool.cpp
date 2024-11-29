@@ -10,8 +10,8 @@ using namespace std;
 
 ThreadPool::ThreadPool() {
 	shutdown = false;
-	int threadCount = std::thread::hardware_concurrency();
-	for (int i = 0; i < threadCount; i++) {
+	unsigned int threadCount = std::thread::hardware_concurrency();
+	for (unsigned int i = 0; i < threadCount; i++) {
 		threads.emplace_back(thread(&ThreadPool::run, this));
 	}
 	cout << "ThreadPool started, threads: " << threadCount << endl;
@@ -64,6 +64,6 @@ int ThreadPool::getCurrentThreadId() {
 	return id;
 }
 
-int ThreadPool::getThreadCount() {
-	return threads.size();
+unsigned int ThreadPool::getThreadCount() {
+	return (unsigned int) threads.size();
 }
