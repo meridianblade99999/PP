@@ -14,16 +14,15 @@ ThreadPool::ThreadPool() {
 	if (threadCount == 0)
 		threadCount = 1;
 	for (unsigned int i = 0; i < threadCount; i++) {
-		#if defined (_WIN32) || defined (_WIN64)
-			unsigned int threadID;
-			HANDLE thread = (HANDLE)_beginthreadex(NULL, 0, &run, &threadParams, 0, &threadID);
-			threads.emplace_back(thread);
-		#else
-			pthread_t thread;
-			pthread_create(&thread, nullptr, &run, &threadParams);
-			printf("pthread is created \n");
-			threads.emplace_back(thread);
-		#endif
+	#if defined (_WIN32) || defined (_WIN64)
+		unsigned int threadID;
+		HANDLE thread = (HANDLE)_beginthreadex(NULL, 0, &run, &threadParams, 0, &threadID);
+		threads.emplace_back(thread);
+	#else
+		pthread_t thread;
+		pthread_create(&thread, nullptr, &run, &threadParams);
+		threads.emplace_back(thread);
+	#endif
 	}
 	cout << "ThreadPool started, threads: " << threadCount << endl;
 }
@@ -31,19 +30,16 @@ ThreadPool::ThreadPool() {
 ThreadPool::~ThreadPool() {
 	threadParams.shutdown = true;
 	threadParams.queueCondition.notify_all();
-	#if defined (_WIN32) || defined (_WIN64)
-		WaitForMultipleObjects(getThreadCount(), threads.data(), TRUE, INFINITE);
-	#endif
+#if defined (_WIN32) || defined (_WIN64)
+	WaitForMultipleObjects(getThreadCount(), threads.data(), TRUE, INFINITE);
+#endif
 	for (unsigned int i = 0; i < threads.size(); i++)
 	{
-		#if defined (_WIN32) || defined (_WIN64)
-			for (unsigned int i = 0; i < getThreadCount(); i++)
-			{
-				CloseHandle(threads[i]);
-			}
-		#else
-			pthread_join(threads[i], nullptr);
-		#endif
+	#if defined (_WIN32) || defined (_WIN64)
+		CloseHandle(threads[i]);
+	#else
+		pthread_join(threads[i], nullptr);
+	#endif
 	}
 	cout << "ThreadPool shutdown" << endl;
 }

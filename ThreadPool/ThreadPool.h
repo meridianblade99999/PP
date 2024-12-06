@@ -34,19 +34,19 @@ private:
 		bool shutdown = false;
 	};
 
-	#if defined (_WIN32) || defined (_WIN64)
-		vector<HANDLE> threads;
-	#else
-		vector<pthread_t> threads;
-	#endif
+#if defined (_WIN32) || defined (_WIN64)
+	vector<HANDLE> threads;
+#else
+	vector<pthread_t> threads;
+#endif
 
 	ThreadParams threadParams;
 
-	#if defined (_WIN32) || defined (_WIN64)
+#if defined (_WIN32) || defined (_WIN64)
 	static unsigned __stdcall run(void* param);
-	#else
+#else
 	static void* run(void* param);
-	#endif
+#endif
 
 	static int getCurrentThreadId();
 };

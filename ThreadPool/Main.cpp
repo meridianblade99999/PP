@@ -35,18 +35,18 @@ int main()
 	file.clear();
 	file.close();
 
-	ThreadPool* threadPool = new ThreadPool();
+	{
+		ThreadPool threadPool;
 
-	for (unsigned int i = 0; i < threadPool->getThreadCount() * 2; i++) {
-		func a = std::bind(&f, std::placeholders::_1);
-		threadPool->addTask(a);
+		for (unsigned int i = 0; i < threadPool.getThreadCount() * 2; i++) {
+			func a = std::bind(&f, std::placeholders::_1);
+			threadPool.addTask(a);
+		}
+
+		cout << "Calculating Trash..." << endl;
+
+		while (!threadPool.isEmpty());
 	}
-
-	cout << "Calculating Trash..." << endl;
-
-	while (!threadPool->isEmpty());
-
-	delete threadPool;
 
 	cout << "Results saved to file: " << fileName << endl;
 }
