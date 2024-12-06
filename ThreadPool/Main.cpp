@@ -4,7 +4,6 @@
 #include <thread>
 #include <functional>
 #include <fstream>
-#include "WindowsThreadPool.h"
 
 using namespace std;
 
@@ -36,7 +35,7 @@ int main()
 	file.clear();
 	file.close();
 
-	WindowsThreadPool* threadPool = new WindowsThreadPool();;
+	ThreadPool* threadPool = new ThreadPool();
 
 	for (unsigned int i = 0; i < threadPool->getThreadCount() * 2; i++) {
 		func a = std::bind(&f, std::placeholders::_1);

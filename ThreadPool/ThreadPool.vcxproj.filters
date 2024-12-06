@@ -21,15 +21,9 @@
     <ClCompile Include="ThreadPool.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="WindowsThreadPool.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ThreadPool.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowsThreadPool.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
