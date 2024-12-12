@@ -20,7 +20,7 @@ ThreadPool::ThreadPool() {
 ThreadPool::~ThreadPool() {
 	shutdown = true;
 	queueCondition.notify_all();
-	for (int i = 0; i < threads.size(); i++)
+	for (unsigned int i = 0; i < threads.size(); i++)
 	{
 		if (threads[i].joinable())
 			threads[i].join();
