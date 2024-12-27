@@ -17,10 +17,11 @@ ThreadPool::ThreadPool() {
 	#if defined (_WIN32) || defined (_WIN64)
 		unsigned int threadID;
 		HANDLE thread = (HANDLE)_beginthreadex(NULL, 0, &run, &threadParams, 0, &threadID);
+		assert(thread != 0);
 		threads.emplace_back(thread);
 	#else
 		pthread_t thread;
-		pthread_create(&thread, nullptr, &run, &threadParams);
+		assert(pthread_create(&thread, nullptr, &run, &threadParams) == 0);
 		threads.emplace_back(thread);
 	#endif
 	}
@@ -49,8 +50,10 @@ bool ThreadPool::isEmpty() {
 }
 
 void ThreadPool::addTask(func task) {
-	lock_guard<mutex> lock(threadParams.queueMutex);
-	threadParams.taskQueue.push(task);
+	{
+		lock_guard<mutex> lock(threadParams.queueMutex);
+		threadParams.taskQueue.push(task);
+	}
 	threadParams.queueCondition.notify_one();
 }
 

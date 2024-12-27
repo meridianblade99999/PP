@@ -6,7 +6,7 @@ OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=ThreadPool
 
 all: $(SOURCES) $(EXECUTABLE)
-clear:
+clean:
 	rm -f ThreadPool *.o
 
 $(EXECUTABLE): $(OBJECTS)
